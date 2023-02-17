@@ -1,6 +1,7 @@
 package view;
 
 import connections.Connections;
+import controller.NapraviProfilController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -23,6 +24,9 @@ public class NapraviProfilView extends GridPane {
 
     private LoginView lv;
 
+    //upisujemo foreign key
+    private int korisnikID;
+
     private Label imeLbl;
     private Label prezimeLbl;
     private Label ulogaLbl;
@@ -43,6 +47,7 @@ public class NapraviProfilView extends GridPane {
 
     public NapraviProfilView(LoginView loginView){
         lv = loginView;
+        korisnikID = lv.getKorisnik().getId();
         elements();
         listeners();
     }
@@ -92,83 +97,140 @@ public class NapraviProfilView extends GridPane {
         this.setHgap(10);
         this.setAlignment(Pos.CENTER);
         this.setPadding(new Insets(10));
+
     }
 
     private void listeners() {
-        napraviProfilBtn.setOnAction(e -> {
-            Connection c = Connections.getInstance().napraviKonekciju();
-            if (passwordPF.getText().equals(potvrdaPasswordPF.getText()) &&
-                    !imeTF.getText().isEmpty() || !prezimeTF.getText().isEmpty() ||
-                    !usernameTF.getText().isEmpty() || !passwordPF.getText().isEmpty()) {
+        napraviProfilBtn.setOnAction(new NapraviProfilController(this));
 
-                if (ulogeCB.getSelectionModel().getSelectedItem().toString().equals("ADMIN")) {
-                    try {
-                        String query = "insert into Korisnici (ime, prezime, uloga, username, password) values(?, ?, ?, ?, ?)";
+//        napraviProfilBtn.setOnAction(e -> {
+//            Connection c = Connections.getInstance().napraviKonekciju();
+//            if (passwordPF.getText().equals(potvrdaPasswordPF.getText()) &&
+//                    !imeTF.getText().isEmpty() || !prezimeTF.getText().isEmpty() ||
+//                    !usernameTF.getText().isEmpty() || !passwordPF.getText().isEmpty()) {
+//
+//                if (ulogeCB.getSelectionModel().getSelectedItem().toString().equals("ADMIN")) {
+//                    try {
+//                        String query = "insert into zaposleni (ime, prezime, uloga, username, password) values(?, ?, ?, ?, ?)";
+//
+//                        PreparedStatement ps = c.prepareStatement(query);
+//                        String ime = imeTF.getText();
+//                        ps.setString(1, imeTF.getText());
+//
+//                        String prezime = prezimeTF.getText();
+//                        ps.setString(2, prezimeTF.getText());
+//
+//                        String uloga = ulogeCB.getSelectionModel().getSelectedItem().toString();
+//                        ps.setString(3, ulogeCB.getSelectionModel().getSelectedItem().toString());
+//
+//                        String username = usernameTF.getText();
+//                        ps.setString(4, usernameTF.getText());
+//
+//                        String password = passwordPF.getText();
+//                        ps.setString(5, passwordPF.getText());
+//
+//                        Korisnik k = new Korisnik(ime, prezime, uloga, username, password);
+//                        Database.getInstance().getListaKorisnika().add(k);
+//
+//                        ps.execute();
+//                        c.close();
+//
+//                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                        alert.setTitle("INFORMACIJA");
+//                        alert.setHeaderText("Uspesno napravljen nalog");
+//                        alert.show();
+//
+//                        imeTF.clear();
+//                        prezimeTF.clear();
+//                        usernameTF.clear();
+//                        passwordPF.clear();
+//                        potvrdaPasswordPF.clear();
+//
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//                if (ulogeCB.getSelectionModel().getSelectedItem().toString().equals("RADNIK")) {
+//                    try {
+//                        String query = "insert into zaposleni (ime, prezime, uloga, username, password, adminFK) " +
+//                                "values(?, ?, ?, ?, ?, ?)";
+//
+//                        PreparedStatement ps = c.prepareStatement(query);
+//                        String ime = imeTF.getText();
+//                        ps.setString(1, imeTF.getText());
+//
+//                        String prezime = prezimeTF.getText();
+//                        ps.setString(2, prezimeTF.getText());
+//
+//                        String uloga = ulogeCB.getSelectionModel().getSelectedItem().toString();
+//                        ps.setString(3, ulogeCB.getSelectionModel().getSelectedItem().toString());
+//
+//                        String username = usernameTF.getText();
+//                        ps.setString(4, usernameTF.getText());
+//
+//                        String password = passwordPF.getText();
+//                        ps.setString(5, passwordPF.getText());
+//
+//                        ps.setInt(6, lv.getKorisnik().getId());
+//
+//                        Korisnik k = new Korisnik(ime, prezime, uloga, username, password);
+//                        Database.getInstance().getListaKorisnika().add(k);
+//
+//                        ps.execute();
+//                        c.close();
+//
+//                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                        alert.setTitle("INFORMACIJA");
+//                        alert.setHeaderText("Uspesno napravljen nalog");
+//                        alert.show();
+//
+//                        imeTF.clear();
+//                        prezimeTF.clear();
+//                        usernameTF.clear();
+//                        passwordPF.clear();
+//                        potvrdaPasswordPF.clear();
+//
+//                    } catch (SQLException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            }
+//            else {
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setTitle("GRESKA");
+//                alert.setHeaderText("Sifre se ne poklapaju");
+//                alert.show();
+//            }
+//        });
+    }
 
-                        PreparedStatement ps = c.prepareStatement(query);
-                        String ime = imeTF.getText();
-                        ps.setString(1, imeTF.getText());
+    public int getKorisnikID() {
+        return korisnikID;
+    }
 
-                        String prezime = prezimeTF.getText();
-                        ps.setString(2, prezimeTF.getText());
+    public TextField getImeTF() {
+        return imeTF;
+    }
 
-                        String uloga = ulogeCB.getSelectionModel().getSelectedItem().toString();
-                        ps.setString(3, ulogeCB.getSelectionModel().getSelectedItem().toString());
 
-                        String username = usernameTF.getText();
-                        ps.setString(4, usernameTF.getText());
 
-                        String password = passwordPF.getText();
-                        ps.setString(5, passwordPF.getText());
+    public TextField getPrezimeTF() {
+        return prezimeTF;
+    }
 
-                        Korisnik k = new Korisnik(ime, prezime, uloga, username, password);
-                        Database.getInstance().getListaKorisnika().add(k);
+    public TextField getUsernameTF() {
+        return usernameTF;
+    }
 
-                        ps.execute();
-                        c.close();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                if (ulogeCB.getSelectionModel().getSelectedItem().toString().equals("RADNIK")) {
-                    try {
-                        String query = "insert into Korisnici (ime, prezime, uloga, username, password, adminFK) " +
-                                "values(?, ?, ?, ?, ?, ?)";
+    public PasswordField getPasswordPF() {
+        return passwordPF;
+    }
 
-                        PreparedStatement ps = c.prepareStatement(query);
-                        String ime = imeTF.getText();
-                        ps.setString(1, imeTF.getText());
+    public PasswordField getPotvrdaPasswordPF() {
+        return potvrdaPasswordPF;
+    }
 
-                        String prezime = prezimeTF.getText();
-                        ps.setString(2, prezimeTF.getText());
-
-                        String uloga = ulogeCB.getSelectionModel().getSelectedItem().toString();
-                        ps.setString(3, ulogeCB.getSelectionModel().getSelectedItem().toString());
-
-                        String username = usernameTF.getText();
-                        ps.setString(4, usernameTF.getText());
-
-                        String password = passwordPF.getText();
-                        ps.setString(5, passwordPF.getText());
-
-                        ps.setInt(6, lv.getKorisnik().getId());
-
-                        Korisnik k = new Korisnik(ime, prezime, uloga, username, password);
-                        Database.getInstance().getListaKorisnika().add(k);
-
-                        ps.execute();
-                        c.close();
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-            else{
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("GRESKA");
-                    alert.setHeaderText("Sifre se ne poklapaju");
-                    alert.show();
-                }
-        });
+    public ComboBox<Uloge> getUlogeCB() {
+        return ulogeCB;
     }
 }

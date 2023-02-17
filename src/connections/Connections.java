@@ -24,7 +24,7 @@ public class Connections {
     public Connection napraviKonekciju()
     {
         try {
-            myConnection = DriverManager.getConnection("jdbc:mysql://remotemysql.com:3306/yoxtgC2qlb", "yoxtgC2qlb", "AncWWRgRAb");
+            myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shift_generator", "root", "root");
         } catch (SQLException e) {
             e.printStackTrace();
         }

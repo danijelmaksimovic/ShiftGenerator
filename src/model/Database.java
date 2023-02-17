@@ -37,7 +37,7 @@ public class Database {
         try {
             Statement myStatement = myConnection.createStatement();
 
-            ResultSet myRS = myStatement.executeQuery("select * from Korisnici");
+            ResultSet myRS = myStatement.executeQuery("select * from zaposleni");
 
             while(myRS.next()){
                 int id = myRS.getInt("id");

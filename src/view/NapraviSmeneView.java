@@ -143,8 +143,6 @@ public class NapraviSmeneView extends VBox {
 
             Database.getInstance().getListaDana().put(RadniDani.PETAK, izaberiRendom());
             radniciPetakLbl.setText(String.valueOf(Database.getInstance().getListaDana().get(RadniDani.PETAK)));
-
-
         });
     }
 
@@ -183,6 +181,8 @@ public class NapraviSmeneView extends VBox {
         listaKorisnika.add(korisnik1 + ", " + korisnik2);
         return listaKorisnika;
     }
+
+
 
     public TreeMap<RadniDani, List<String>> getMapaSmena() {
         return mapaSmena;
